@@ -15,7 +15,7 @@ do
 	ARTIFACT_NAME=$(echo $element | cut -d '/' -f7)
 	echo $ARTIFACT_NAME
 	URL="${BASE_NEXUS_URL}${element}"
-	curl -i $URL -o $ARTIFACT_NAME
+	curl $URL -o $ARTIFACT_NAME
 	if [[ $element == *".asc"* ]]; then
 		echo "Has .asc extension"
 	else
@@ -23,7 +23,7 @@ do
 		MD5_ARTIFACT_NAME="${ARTIFACT_NAME}.md5"
 		SHA1_URL="${URL}.sha1"
 		SHA1_ARTIFACT_NAME="${ARTIFACT_NAME}.sha1"
-		curl -i $MD5_URL -o $MD5_ARTIFACT_NAME
-		curl -i $SHA1_URL -o $SHA1_ARTIFACT_NAME
+		curl $MD5_URL -o $MD5_ARTIFACT_NAME
+		curl $SHA1_URL -o $SHA1_ARTIFACT_NAME
 	fi
 done
