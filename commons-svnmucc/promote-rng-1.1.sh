@@ -21,7 +21,7 @@ svnmucc -U https://dist.apache.org/repos/dist \
           rm release/commons/rng/source/commons-rng-1.0-src.zip.asc \
           rm release/commons/rng/source/commons-rng-1.0-src.zip.sha256 \
           rm release/commons/rng/source/commons-rng-1.0-src.zip.sha1 \
-          rm dev/commons/rng/site \
+          rm dev/commons/rng/1.1-RC7/site \
           mv dev/commons/rng/1.1-RC7/RELEASE-NOTES.txt release/commons/rng/RELEASE-NOTES.txt \
           mv dev/commons/rng/1.1-RC7/HEADER.html release/commons/rng/HEADER.html \
           mv dev/commons/rng/1.1-RC7/README.html release/commons/rng/README.html \
