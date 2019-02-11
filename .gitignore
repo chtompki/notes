@@ -1,0 +1,6 @@
+# Created by .ignore support plugin (hsz.mobi)
+.localized
+.DS_Store
+.idea
+*.iml
+*Sandbox*
