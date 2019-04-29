@@ -1,50 +1,15 @@
 #!/bin/bash
 
-ARTIFACTS="commons-imaging-1.0-alpha1-bin.tar.gz;commons-imaging-1.0-alpha1-bin.zip;commons-imaging-1.0-alpha1-javadoc.jar;commons-imaging-1.0-alpha1-sources.jar;commons-imaging-1.0-alpha1-src.tar.gz;commons-imaging-1.0-alpha1-src.zip;commons-imaging-1.0-alpha1-test-sources.jar;commons-imaging-1.0-alpha1-tests.jar;commons-imaging-1.0-alpha1.jar;commons-imaging-1.0-alpha1.pom"
+BASE_NEXUS_URL="https://repository.apache.org/content/repositories/orgapachecommons-1438/org/apache/commons/commons-imaging/1.0-alpha1/"
+
+ARTIFACTS="commons-imaging-1.0-alpha1-javadoc.jar;commons-imaging-1.0-alpha1-javadoc.jar.asc;commons-imaging-1.0-alpha1-javadoc.jar.md5;commons-imaging-1.0-alpha1-javadoc.jar.sha1;commons-imaging-1.0-alpha1-sources.jar;commons-imaging-1.0-alpha1-sources.jar.asc;commons-imaging-1.0-alpha1-sources.jar.md5;commons-imaging-1.0-alpha1-sources.jar.sha1;commons-imaging-1.0-alpha1-test-sources.jar;commons-imaging-1.0-alpha1-test-sources.jar.asc;commons-imaging-1.0-alpha1-test-sources.jar.md5;commons-imaging-1.0-alpha1-test-sources.jar.sha1;commons-imaging-1.0-alpha1-tests.jar;commons-imaging-1.0-alpha1-tests.jar.asc;commons-imaging-1.0-alpha1-tests.jar.md5;commons-imaging-1.0-alpha1-tests.jar.sha1;commons-imaging-1.0-alpha1.jar;commons-imaging-1.0-alpha1.jar.asc;commons-imaging-1.0-alpha1.jar.md5;commons-imaging-1.0-alpha1.jar.sha1;commons-imaging-1.0-alpha1.pom;commons-imaging-1.0-alpha1.pom.asc;commons-imaging-1.0-alpha1.pom.md5;commons-imaging-1.0-alpha1.pom.sha1"
 
 IFS=';' read -r -a array <<< "${ARTIFACTS}"
 
 for element in "${array[@]}"
 do
-	if [[ ${element} =~ ^.*tar.gz.*$ || ${element} =~ ^.*zip.*$ ]];
-	then
-		ARTIFACT_SHA512=$(openssl sha512 $element | cut -d '=' -f2 | cut -d ' ' -f2)
-		FILE_SHA512=$(cut -d$'\r' -f1 $element.sha512)
-		if test "${ARTIFACT_SHA512}" != "${FILE_SHA512}"
-		then
-			echo "$element failed sha512 check"
-			echo "==${ARTIFACT_SHA512}=="
-			echo "==${FILE_SHA512}=="
-			exit 1;
-		fi
-	else
-		ARTIFACT_MD5=$(md5 $element | cut -d '=' -f2 | cut -d ' ' -f2)
-		FILE_MD5=$(cut -d$'\r' -f1 $element.md5)
-		ARTIFACT_SHA1=$(openssl sha1 $element | cut -d '=' -f2 | cut -d ' ' -f2)
-		FILE_SHA1=$(cut -d$'\r' -f1 $element.sha1)
-		if test "${ARTIFACT_MD5}" != "${FILE_MD5}"
-		then
-			echo "$element failed md5 check"
-			echo "==${ARTIFACT_MD5}=="
-			echo "==${FILE_MD5}=="
-			exit 1;
-		fi
-		if test "${ARTIFACT_SHA1}" != "${FILE_SHA1}"
-		then
-			echo "$element failed sha1 check"
-			echo "==${ARTIFACT_SHA1}=="
-			echo "==${FILE_SHA1}=="
-			exit 1;
-		fi
-		
-		
-		gpg --verify $element.asc $element > /dev/null 2>&1
-		if test "$?" != "0"
-		then
-			echo "$element failed gpg signature check"
-			exit 1;
-		fi
-	fi
+	ARTIFACT_NAME=$(echo $element | cut -d '/' -f7)
+	echo $ARTIFACT_NAME
+	URL="${BASE_NEXUS_URL}${element}"
+	curl $URL -o $ARTIFACT_NAME
 done
-
-echo "SUCCESSFUL VALIDATION"
