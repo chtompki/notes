@@ -35,15 +35,13 @@ do
 			echo "==${ARTIFACT_SHA1}=="
 			echo "==${FILE_SHA1}=="
 			exit 1;
-		fi
-		
-		
-		gpg --verify $element.asc $element > /dev/null 2>&1
-		if test "$?" != "0"
-		then
-			echo "$element failed gpg signature check"
-			exit 1;
-		fi
+		fi	
+	fi
+	gpg --verify $element.asc $element > /dev/null 2>&1
+	if test "$?" != "0"
+	then
+		echo "$element failed gpg signature check"
+		exit 1;
 	fi
 done
 
