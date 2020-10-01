@@ -135,4 +135,4 @@ echo $(clean_and_build_validation_dir)
 echo $(copy_in_checked_out_artifacts)
 echo $(download_nexus_artifacts_to_validation_directory)
 echo $(validate_signatures)
-clean_up_afterwards
+#clean_up_afterwards
